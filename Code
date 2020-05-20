@@ -517,14 +517,14 @@ def Is_game_over(message):
 
 def delete_player(index,message):
  try:
-     for i in range(index,players_in_game[message.chat.id]+1):
-         players_of_the_game[i][message.chat.id] ,players_of_the_game[i+1][message.chat.id]= players_of_the_game[i+1][message.chat.id] , players_of_the_game[i][message.chat.id]
+     if (index!=players_in_game[message.chat.id]):
+         for i in range(index,players_in_game[message.chat.id]+1):
+             players_of_the_game[i][message.chat.id] ,players_of_the_game[i+1][message.chat.id]= players_of_the_game[i+1][message.chat.id] , players_of_the_game[i][message.chat.id]
      players_of_the_game[players_in_game[message.chat.id]][message.chat.id]=None
      players_in_game[message.chat.id]-=1
-
+ 
  except Exception as e:
-     bot.send_message(message.chat.id,"Случилась какая-то ошибка.")  
-
+     bot.send_message(message.chat.id,"Случилась какая-то ошибка.") 
 
 """
 Функция выдаёт карты игроку.

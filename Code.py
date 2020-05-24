@@ -44,13 +44,13 @@ Coloda={}
 player_cards={}
 players_in_game={}
 
-""" Очень страшная переменная зависит от номера игрока (1-6) и от chat.id , она хранит информацию о игроке."""
+""" Очень страшная переменная, зависит от номера игрока (1-6) и от chat.id, она хранит информацию о игроке."""
 players_of_the_game=[{} for i in range(10)]
 
 
 Cozur={}
 
-"""Просто две кучи карт одна для карт которые подбросили , другая для тех которыми побились."""
+"""Просто две кучи карт: одна для карт, которые подбросили, другая для тех, которыми побились."""
 kycha={}
 kycha_defence={}
 
@@ -63,10 +63,10 @@ step={}
 
 Is_over={}
 
-"""Задержка между ходами, нужна если в случае чего надо отменить переход к слующему ходу"""
+"""Задержка между ходами, нужна если в случае чего надо отменить переход к следующему ходу"""
 Timer={}
 
-"""Хранит первое сообщения ,который пользователь написал боту"""
+"""Хранит первое сообщение, который пользователь написал боту"""
 first_message={}
 
 """Принимает значение минимального козыря"""
@@ -79,7 +79,7 @@ player_defender={}
 @bot.message_handler(commands=["help"])
 def help_player(message):
  try:  
-         bot.send_message(message.chat.id,"Здравствуйте, я бот для игры в дурака.\nЯ работаю в несколько этапов:\n1)/create -для создания игры ,также выберется козырь.\n2)/join -после того как игра была создана к ней можно присоединиться и получить свои карты.\n3)/host- эта команда начинает игру, присоединяться к уже запущеной игре нельзя. ")
+         bot.send_message(message.chat.id,"Здравствуйте, я бот для игры в дурака.\nЯ работаю в несколько этапов:\n1)/create - для создания игры, также выберется козырь.\n2)/join -после того, как игра была создана, к ней можно присоединиться и получить свои карты.\n3)/host- эта команда начинает игру, присоединяться к уже запущеной игре нельзя. ")
  except Exception as e:
      bot.send_message(message.chat.id,"Случилась какая-то ошибка.")   
         
@@ -116,11 +116,11 @@ def new_game(message):
         
 
 
-"""На случай если новую игру не создали , но кто-то уже пытается в неё играть"""
+"""На случай, если новую игру не создали, но кто-то уже пытается в неё играть"""
 @bot.message_handler(func =lambda message: (message.chat.id not in Is_over) or (Is_over[message.chat.id]==True))
 def game_is_not_started(message):
  try:  
-      bot.reply_to(message,"Создайте новую игру,пожалуйста!")
+      bot.reply_to(message,"Создайте новую игру, пожалуйста!")
  except Exception as e:
      bot.send_message(message.chat.id,"Случилась какая-то ошибка.")     
 
@@ -128,7 +128,7 @@ def game_is_not_started(message):
 """Срабатывает в случае окончания игры"""
 def the_game_is_over(message):
  try:       
-         bot.send_message(message.chat.id,"Игра окончена! Создайте новую игру,чтобы сыграть снова!")
+         bot.send_message(message.chat.id,"Игра окончена! Создайте новую игру, чтобы сыграть снова!")
          To_zero(message)
          Is_over[message.chat.id]=True
  except Exception as e:
@@ -140,13 +140,13 @@ def the_game_is_over(message):
 @bot.message_handler(commands=["join"])
 def new_player(message):
  try:   
-    """Нельзя присоединятся , если ты уже присоеденился ,если игра запущена (в неё уже играют) и если уже есть 6 игроков""" 
+    """Нельзя присоединяться, если ты уже присоединился, если игра запущена (в неё уже играют) и если уже есть 6 игроков.""" 
     if Is_in_game(message)==True:
         bot.reply_to(message,"Вы уже в игре.")
     elif Is_game[message.chat.id]==True:
-        bot.reply_to(message,"Игра уже запущена, к ней нельзя присоедениться!")
+        bot.reply_to(message,"Игра уже запущена, к ней нельзя присоединиться!")
     elif players_in_game[message.chat.id]==6:
-        bot.reply_to(message,"В игре уже 6 человек ,больше нельзя.")   
+        bot.reply_to(message,"В игре уже 6 человек, больше нельзя.")   
     else:    
         players_in_game[message.chat.id]+=1   
         player_cards[message.from_user.id]=""
@@ -154,16 +154,16 @@ def new_player(message):
         Give_cards(message.from_user.id,message.chat.id)
         """Добавляем игрока"""
         Add_player(message)
-        bot.reply_to(message,f"{message.from_user.first_name} вы успешно присоеденились к игре.")
+        bot.reply_to(message,f"{message.from_user.first_name}, вы успешно присоединились к игре.")
  except Exception as e:
      bot.send_message(message.chat.id,"Случилась какая-то ошибка.")  
         
 
-"""На случай если пользователь не присоеденившийся к игре пытается в неё играть """
+"""На случай если пользователь не присоединившийся к игре пытается в неё играть """
 @bot.message_handler(func =lambda message: Is_in_game(message)==False)
 def Not_in_game(message):
  try:     
-    bot.reply_to(message,"Сначала присоеденитесь к игре!")
+    bot.reply_to(message,"Сначала присоединитесь к игре!")
  except Exception as e:
      bot.send_message(message.chat.id,"Случилась какая-то ошибка.")  
           
@@ -185,12 +185,12 @@ def show(user,chat):
             Card3=player_cards[user][i+4]+player_cards[user][i+5]
         else:
             Card3=None  
-        """Добавляем карты в столбик. Столбик рассчитан на 3 карты , но возможно прийдётся добавить только 1 или 2."""  
+        """Добавляем карты в столбик. Столбик рассчитан на 3 карты, но возможно прийдётся добавить только 1 или 2."""  
         Adding(Card,Card2,Card3)  
     
     """
     Добавляем вспомогательные клавиши. 
-    В первом случае игрок ,который "обороняется" ,еще не назначен, т.к ход только начался. 
+    В первом случае игрок, который "обороняется", еще не назначен, т.к. ход только начался. 
     поэтому мы добавляем клавишу "Взять" игроку ,чей ход следующий после этого:
         turn[chat] % players_in_game[chat]  + 1.
     Во втором случае "обороняющийся" уже назначен и мы добавляем клавишу уже ему.
@@ -204,7 +204,7 @@ def show(user,chat):
         markup.add("Бито")     
 
     """
-    Существует два способа отправить клавиатуру конкретному человеку , а не всем в группе:
+    Существует два способа отправить клавиатуру конкретному человеку, а не всем в группе:
     1) С помошью ответа на конкретное сообщение,которым мы и пользуемся,отвечая на первое сообщение пользователя,
     которое хранится в first_message.
     2) Пользователи, которые были @упомянуты в поле text объекта Message; С этим способом я не разобрался:(
@@ -216,8 +216,8 @@ def show(user,chat):
 
 def Adding(Card,Card2,Card3):
  try:   
-    """Т.к десятка в отличии от других карт имеет две цыфры она хранится в виде еденицы , 
-    но пользователю её надо показать в виде 10 , поэтому ести карта равна 1 к ней надо прибавить 0.""" 
+    """Т.к. десятка, в отличие от других карт, имеет две цифры она хранится в виде единицы, 
+    но пользователю её надо показать в виде 10, поэтому ести карта равна 1 к ней надо прибавить 0.""" 
     if (Card!=None) and (Card[1]=="1") :
         Card+="0" 
     if (Card2!=None) and (Card2[1]=="1"):
@@ -225,7 +225,7 @@ def Adding(Card,Card2,Card3):
     if (Card3!=None) and (Card3[1]=="1"):
         Card3+="0" 
 
-    """Проверяем сколько карт нам надо добавить в очередной столбик :3 ,2 или 1."""
+    """Проверяем сколько карт нам надо добавить в очередной столбик :3, 2 или 1."""
     if (Card3!=None):
         markup.add(Card,Card2,Card3)
     elif (Card2!=None):  
@@ -284,7 +284,7 @@ def Add_card_for_defence(message):
         take_cards(message)
         return
 
-    """Проверяем ,что игрок не мухлюет (кинул карту ,которая есть в его колоде и которой он может биться.)"""    
+    """Проверяем, что игрок не мухлюет (кинул карту, которая есть в его колоде, и которой он может биться.)"""    
     if (Is_everything_alright_defence(message)==False):
         return None
 
@@ -297,7 +297,7 @@ def Add_card_for_defence(message):
     """Показываем игроку его карты """ 
     show(message.from_user.id,message.chat.id)
     
-    """Функция Create_table создаёт игровой стол,она будет рассмотена позже."""
+    """Функция Create_table создаёт игровой стол,она будет рассмотрена позже."""
     bot.send_message(message.chat.id,Create_table(message))
  except Exception as e:
      bot.send_message(message.chat.id,"Случилась какая-то ошибка.")    
@@ -307,10 +307,10 @@ def Add_card_for_defence(message):
 @bot.message_handler(func=lambda message:(message.chat.id in Is_game) and  (Is_game[message.chat.id]==True))
 def Add_card(message):
  try:   
-    """10 хранится в программе в виде 1 , но игрок вводит обычную 10 ,поэтому мы отрезаем конечный ноль.""" 
+    """10 хранится в программе в виде 1, но игрок вводит обычную 10, поэтому мы отрезаем конечный ноль.""" 
     if (len(message.text)==3):
         message.text=message.text[:-1] 
-    """Если игрок решил закончить ход переходим к соотвецтвующей функции"""    
+    """Если игрок решил закончить ход переходим к соответсвующей функции"""    
     if (message.text=="Бито"):
         Finish_turn(message)
         return
@@ -405,7 +405,7 @@ def the_game(message):
         """Обозначем "обороняющегося" игрка."""
         player_defender[message.chat.id]=players_of_the_game[turn[message.chat.id]][message.chat.id]
 
-        bot.send_message(message.chat.id,f"{player_defender[message.chat.id].first_name} на тебя ходят.Готовся откидываться")
+        bot.send_message(message.chat.id,f"{player_defender[message.chat.id].first_name}, на тебя ходят. Готовься отбивать.")
     if (step[message.chat.id]==2):
         """После выдачи карт мы начнём новый ход"""
         step[message.chat.id]=1
@@ -485,18 +485,18 @@ def Is_game_over(message):
     """Ищем игроков у которых закончились карты , поздравляем их с победой и удаляем из игры.""" 
     for i in range(1,players_in_game[message.chat.id]+1):
         if (len(player_cards[players_of_the_game[i][message.chat.id].id])==0):
-            bot.send_message(message.chat.id,f"Поздравляю {players_of_the_game[i][message.chat.id].first_name} ты выиграл!")  
+            bot.send_message(message.chat.id,f"Поздравляю {players_of_the_game[i][message.chat.id].first_name}, ты выиграл(а)!")  
             delete_player(i,message)
     
     """
     Рассмотрим два варианта окончания игры:
     1)Остался один игрок -Дурак.
-    2)У всех игроков карты заончились -Ничья.
+    2)У всех игроков карты закончились -Ничья.
 
     Если игра окончена запускаем функцию the_game_is_over.
     """        
     if (players_in_game[message.chat.id]==1):
-      bot.send_message(message.chat.id,f"{players_of_the_game[1][message.chat.id].first_name} ты проиграл. Поприветствуйте нового дурака.")
+      bot.send_message(message.chat.id,f"{players_of_the_game[1][message.chat.id].first_name}, ты проиграл. Поприветствуйте нового дурака.")
       the_game_is_over(message)
 
     if (players_in_game[message.chat.id]==0):
@@ -663,7 +663,7 @@ def Is_everything_alright(message):
         bot.reply_to(message,"У вас нет такой карты.")  
         return False
     if (len(kycha[message.chat.id])!=0) and (message.text[1] not in kycha[message.chat.id]) and (message.text[1] not in kycha_defence[message.chat.id]):
-        bot.reply_to(message,"Вы не можете добавлять карту которой нет на столе")
+        bot.reply_to(message,"Вы не можете добавлять карту, которой нет на столе")
         return False
     if (0==player_cards[player_defender[message.chat.id].id]):
         bot.reply_to(message,"Больше карт добавлять нельзя!")
